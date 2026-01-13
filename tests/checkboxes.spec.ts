@@ -13,14 +13,20 @@ test("check checkboxes state", async({page}) => {
 test("check an unchecked checkbox", async({page}) => {
     await page.goto("https://the-internet.herokuapp.com/checkboxes");
 
-    let checkbox1 = await page.locator('(//input[@type="checkbox"])[1]');
-    let checkbox2 = await page.locator('(//input[@type="checkbox"])[2]');
-
-    if(!(checkbox1.isChecked())){
-        await checkbox1.check();
+    const checkbox1 = page.locator('(//input[@type="checkbox"])[1]');
+    if (!(await checkbox1.isChecked())) {
+      await checkbox1.check();
     }
-
+    await checkbox1.check();
     await expect(checkbox1).toBeChecked();
+});
 
-    await page.waitForTimeout(2000);
+test("uncheck a checked checkbox", async ({page}) => {
+    await page.goto("https://the-internet.herokuapp.com/checkboxes");
+
+    const checkbox2 = page.locator('(//input[@type="checkbox"])[2]');
+
+    checkbox2.uncheck();
+
+    await expect(checkbox2).not.toBeChecked();
 });
